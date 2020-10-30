@@ -273,3 +273,17 @@ extension AudioRecorderController: AVAudioPlayerDelegate{
     }
 }
 
+
+extension AudioRecorderController: AVAudioRecorderDelegate {
+    func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
+         if let recordingURL = recordingURL {
+             audioPlayer = try? AVAudioPlayer(contentsOf: recordingURL)
+         }
+         recordingURL = nil
+     }
+     func audioRecorderEncodeErrorDidOccur(_ recorder: AVAudioRecorder, error: Error?) {
+         if let error = error {
+             print("Audio Recorder Error: \(error)")
+         }
+     }
+}
