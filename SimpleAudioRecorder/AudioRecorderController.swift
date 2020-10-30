@@ -59,8 +59,17 @@ class AudioRecorderController: UIViewController {
         playButton.isSelected = isPlaying // 7:07 to see how the got hte label to chance.
         
         let elapsedTime = audioPlayer?.currentTime ?? 0
+        let duration = audioPlayer?.duration ?? 0
+        let timeRemaining = duration.rounded() - elapsedTime
         
-        timeElapsedLabel.text = timeIntervalFormatter.string(for: elapsedTime)
+        timeElapsedLabel.text = timeIntervalFormatter.string(from: elapsedTime)
+        
+        timeSlider.minimumValue = 0
+        timeSlider.maximumValue = Float(duration)
+        timeSlider.value = Float(elapsedTime)
+        
+        timeRemainingLabel.text = "-" + timeIntervalFormatter.string(from: timeRemaining)!
+        
     }
     
     deinit {
@@ -75,7 +84,7 @@ class AudioRecorderController: UIViewController {
     func startTimer() {
         timer?.invalidate()
         
-        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] (_) in
+        timer = Timer.scheduledTimer(withTimeInterval: 0.030, repeats: true) { [weak self] (_) in
             guard let self = self else { return }
             
             self.updateViews()
